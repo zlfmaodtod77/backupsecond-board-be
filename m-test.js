@@ -31,7 +31,7 @@ for(let i =0; i < score.length; i++) {
 console.log(빠따);
 
 const 빠따 = []
-for(let i = 0; i < Score.length i++) {
+for(let i = 0; i < Score.length; i++) {
     if(scores[i].score < 40) {
         빠따.push(score[i].name)
     }
@@ -39,7 +39,7 @@ for(let i = 0; i < Score.length i++) {
 console.log(빠따);
 
 const 빠따 = []
-for(let i = 0; i < score.length i++) {
+for(let i = 0; i < score.length; i++) {
     if(score[i].score < 40) {
         빠따.push(score[i].name)
     }
@@ -47,7 +47,7 @@ for(let i = 0; i < score.length i++) {
 console.log(빠띠);
 
 const 빠따 = []
-for(let i = 0; i < score.length i++) {
+for(let i = 0; i < score.length; i++) {
     if(score[i].score < 40) {
         빠따.push(score[i].name)
     }
@@ -55,7 +55,7 @@ for(let i = 0; i < score.length i++) {
 console.log(빠따);
 
 const 빠따 = []
-for(let i = 0; i < score.length i++) {
+for(let i = 0; i < score.length; i++) {
     if(score[i].score < 40) {
         빠따.push(score[i].name)
     }
@@ -63,7 +63,7 @@ for(let i = 0; i < score.length i++) {
 console.log(빠따);
 
 const 빠따 = [] 
-for(let i = 0; i < score.length i ++) {
+for(let i = 0; i < score.length; i ++) {
     if(score[i].score < 40) {
         빠따.push(score[i].name)
     }
@@ -71,7 +71,7 @@ for(let i = 0; i < score.length i ++) {
 console.log(빠따);
 
 const 빠따 = []
-for(let i = 0; i < score.length i++) {
+for(let i = 0; i < score.length; i++) {
     if(score[i].score < 40) {
         빠따.push(score[i].name)
     }
@@ -79,9 +79,93 @@ for(let i = 0; i < score.length i++) {
 console.log(빠따);
 
 const 빠따 = []
-for(let i = 0; i < score.length i++) {
+for(let i = 0; i < score.length; i++) {
     if(score[i].score < 40) {
         빠따.push(score[i].name)
     }
 };
 console.log(빠따);
+
+const 빠따 = []
+for(let i = 0; i < score.length; i ++) {
+    if(score[i].score < 40) {
+        빠따.push(score[i].name)
+    }
+};
+console.log(빠따);
+
+// 과제3
+// 가장 공부를 잘했던 “지영” 의 점수 확인 for 문의 경우 지영 의 score 반 변수에 할당 되는 한편 find 를 사용하면 지영의 객체를 반환한다. 
+// 이때 지영의 score 만 할당되도록 수정한다.
+
+let 지영score = null                            //지영score 에 null 없는 값을 넣어 놓는다
+for (let i = 0; i < scores.length; i++) {       // for 문으로 배열을 한번씩 돌아준다      
+    if (scores[i].name === '지영') {            // 이때 scores 의 name 이 지영과 같은 것을 가져오게 한다
+        지영score = scores[i].score             // 지영score 는 scores 의 score 점수를 담는다
+    }
+};
+console.log("지영:" , 지영score); 
+
+let 지영score = null
+for(let i = 0; i <score.length; i++) {
+    if(score[i].name === '지영'){
+        지영score = score[i].score
+    }
+};
+console.log('지영', 지영score);
+
+
+// app.get('/list', (req, res) => {
+//     const { keyword } = req.query;
+//     console.log(keyword);
+//     res.send("게시글 리스트")
+// });
+
+// app.get('/users/:id',(req, res) => {
+//     const { id } = req.params;
+//     console.log(id);
+//     res.send("회원정보 한 명")
+// });
+
+// app.get('/posts/:postid',(req, res) => {
+//     const { postid } = req.params;
+//     console.log(postid);
+//     res.send("게시글 상세")
+// });
+
+// app.post('/login', (req, res) =>{
+//    const {email,password} = req.body;
+//    console.log("email", email);
+//    console.log("password", password);
+//    res.send("로그인")
+// });
+
+// app.post('/signup', (req, res) => {
+//     const { id, password , nikname } = req.body;
+//     console.log("id", id);
+//     console.log("password", password);
+//     console.log("nikname", nikname);
+//     res.send("회원가입")
+// });
+
+// app.post('/posts/write',(req, res) => {
+//     const { title, content } = req.body;
+//     console,log("title", title);
+//     console.log("content", content);
+//     res.send("게시글 작성")
+// });
+
+// app.post('/posts/:postid/edit',(req, res) => {
+//     const { postid } = req.params;
+//     const { title, content } = req.body;
+//     console.log(postid);
+//     console.log("title", title);
+//     console.log("content", content);
+//     res.send("게시글 수정")
+// });
+
+// app.post('/posts/:postid/delete',(req, res) => {
+//     const { postid} = req.params;
+//     console.log(postid) ;
+//     res.send("게시글 삭제")
+// });

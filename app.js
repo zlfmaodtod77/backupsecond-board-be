@@ -1,64 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-
-const app = express();
+const cors = require('cors');
 const port = 9091;
-
-
-// app.get('/list', (req, res) => {
-//     const { keyword } = req.query;
-//     console.log(keyword);
-//     res.send("게시글 리스트")
-// });
-
-// app.get('/users/:id',(req, res) => {
-//     const { id } = req.params;
-//     console.log(id);
-//     res.send("회원정보 한 명")
-// });
-
-// app.get('/posts/:postid',(req, res) => {
-//     const { postid } = req.params;
-//     console.log(postid);
-//     res.send("게시글 상세")
-// });
-
-// app.post('/login', (req, res) =>{
-//    const {email,password} = req.body;
-//    console.log("email", email);
-//    console.log("password", password);
-//    res.send("로그인")
-// });
-
-// app.post('/signup', (req, res) => {
-//     const { id, password , nikname } = req.body;
-//     console.log("id", id);
-//     console.log("password", password);
-//     console.log("nikname", nikname);
-//     res.send("회원가입")
-// });
-
-// app.post('/posts/write',(req, res) => {
-//     const { title, content } = req.body;
-//     console,log("title", title);
-//     console.log("content", content);
-//     res.send("게시글 작성")
-// });
-
-// app.post('/posts/:postid/edit',(req, res) => {
-//     const { postid } = req.params;
-//     const { title, content } = req.body;
-//     console.log(postid);
-//     console.log("title", title);
-//     console.log("content", content);
-//     res.send("게시글 수정")
-// });
-
-// app.post('/posts/:postid/delete',(req, res) => {
-//     const { postid} = req.params;
-//     console.log(postid) ;
-//     res.send("게시글 삭제")
-// });
 
 const movies = [
     {id: 1, movie_title: "Misérables, Les", hit_count: 23, user_id: 1, created_at: "2022-08-11 00:40:32"},
@@ -95,40 +38,86 @@ const users = [
     {id: 10,name: "Kaylee Jakoubec", email: "kjakoubec2i@epa.gov"}
 ]
 
+const app = express();
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors());
 
 // 영화 리스트
 app.get('/movies', (req, res) => {
-    res.send(movies.map (movie => ({
+    const { page } = req.query.pqge || 1
+    // console.log("page :", page);
+
+    //기본값 유지
+    const cloneMovies = [...movies];
+    const LastPage = math.ceil(movies.length / 10);
+    const startIndex = ((page -1) * 10);
+    const paginationMovies = cloneMovies.splice(startIndex, 10);
+
+    const moviesList = paginationMovies.map (movie => ({
         ...movie,
         name: users.find (user => user.id === movie.user_id).name
+    }));
+   
+    moviesList.sort((a, b) => {
+        const preTimestamp = new data(a.created_at).getTime();
+        const curTimestamp = new data(b.created_at).getTime();
+        return curTimestamp - preTimestamp;           //등록일 내림차순
+    }); 
 
-    })))
-});
+    
+    res.send({
+        pageinfo: {
+            LastPage,
+        },
+        movies: paginationMovies,
+        movies: moviesList,
+    });
+}),
 
 //상세
-app.get('/movies/:id',(req, res) => {
-    const id = req.params.id                                                               //사용자가 보낸id를 가져온다
-    const movieid = movies.filter(movie => movie.id === Number(id))                         //id 에 해당한 movie를 가져온다
-    const hit = movieid.find(movieid => movieid.hit_count++)                               //가져온 movie 에서 조회수(hit_count) + 1을 더한 객체 만든다
-    const findmovie = movies.findIndex(movies => movies.hit_count === movieid.hit_count)   //hit_count + 1 더한 객체를 movie내에서 기존 객체를 바꾼다
-        if(findindex > -1){                                                                //hit_count + 1 더한 객체를 반환한다
-            movies.splice(findmovie, 1, hit)
-        }
-        res.send(movieid)
+app.get('/movies/:id', (req, res)=> {
+    //1. 사용자가 보내준 id 를 가져온다
+    const {id} = req.params;
+    //2. id 에 해당하는 movie 를 가져온다
+    const selectedmovie = movies.find(movie => movie.id === Number(id));
+//     //3. 가져온 movie 에서 hit_count 1을 더한 객체를 만든다
+    const movietoreplace = {
+        ...selectedmovie,
+        hit_count: selectedmovie.hit_count +1
+    };
+    //4. hit_count 1을 더한 객체를 movies 내에서 기존 객체에 치환한다(바꾼다 findindex, splice 사용)
+   const targetindex = movies.findIndex(movie => movie.id === Number(id));
+   movies.splice(targetindex, 1, movietoreplace);
+//     //5. hit_count 1을 더한 객체를 반환
+    // console.log(targetindex)
+    return res.send("반환");
 });
 
 //등록
 app.post('/movies', (req, res) => {
-    const newmovie = req.body                                //사용자가 등록할 영화의 정보를 주면 받아온다 from 요청 (req)
-    newmovie.id = movies[movies.length - 1].id +1            //가져온 영화정보에 id를 부여한다
-    newmovie.hit_count = 0                                   //조회수 (hit_count)는 기본으로 0으로 설정한다
-    newmovie.created_at = new Date(). toISOString()          //작성일은 현재 시간을 넣는다
+    //1. 사용자가 등록할 영화의 정보를 주면 받아온다 from 요청 (req)
+    // const newmovie = req.body;    
+    const { movie_title, user_id} = req.body;         
+    //2. 가져온 영화정보에 id를 부여한다
+    // newmovie.id = movies[movies.length - 1].id +1;   
+    //3. 조회수 (hit_count)는 기본으로 0으로 설정한다
+    // newmovie.hit_count = 0;
+    const hitcount = 0;       
+    //4. 작성일은 현재 시간을 넣는다                         
+    // newmovie.created_at = new Date(). toISOString();
+    const date = new Date().toISOString().substring(0, 10);
+    const time = new Date().toISOString().substring(11, 19);         
+     // 2, 3, 4 부여된 영화정보를 movies에 추가한다
 
-    movies.push(newmovie)                                    // 2, 3, 4 부여된 영화정보를 movies에 추가한다
-    console.log(movies)
-    res.send("무비등록")
+     movies.unshift({
+        id: movies.length + 2,
+        movie_title,
+        hit_count: hitcount,
+        user_id,
+        created_at: `${date} ${time}`,
+     });                                  
+    return res.send(movies);
 });
     
 
